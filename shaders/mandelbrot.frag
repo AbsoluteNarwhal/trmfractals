@@ -1,6 +1,35 @@
 #version 330 core
-out vec4 FragColor;
+in vec2 fragCoord;
+out vec4 fragColor;
+
+uniform vec2 u_center;
+uniform float u_zoom;
+uniform int u_maxIter;
 
 void main() {
-    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-} 
+    // Map fragment to complex plane
+    vec2 c = fragCoord / u_zoom + u_center;
+
+    vec2 z = vec2(0.0);
+    int iter = 0;
+
+    for (int i = 0; i < u_maxIter; i++) {
+        if (dot(z, z) > 4.0) break;
+        z = vec2(z.x*z.x - z.y*z.y, 2.0*z.x*z.y) + c;
+        iter++;
+    }
+
+    // dot(z,z) <= 4.0 is not divergent (inside the set)
+    if (dot(z, z) <= 4.0) {
+        fragColor = vec4(0.0, 0.0, 0.0, 1.0);
+        return;
+    }
+
+    float t = float(iter) / float(u_maxIter);
+    fragColor = vec4(
+        0.5 + 0.5 * cos(6.28318 * (t + 0.0)),
+        0.5 + 0.5 * cos(6.28318 * (t + 0.33)),
+        0.5 + 0.5 * cos(6.28318 * (t + 0.67)),
+        1.0
+    );
+}

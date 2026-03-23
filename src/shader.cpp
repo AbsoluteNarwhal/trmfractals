@@ -70,3 +70,8 @@ ShaderProgram::ShaderProgram(const std::filesystem::path& vertPath, const std::f
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 }
+
+ShaderProgram::~ShaderProgram() {
+    if (program.has_value()) 
+        glDeleteProgram(program.value());
+}

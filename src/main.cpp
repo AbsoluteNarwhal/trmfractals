@@ -2,10 +2,27 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <cmath>
+#include <memory>
+
+// Uniforms (mandelbrot parameters)
+float centerX = -0.5;
+float centerY = 0.0;
+float zoom = 0.65;
+int maxIter = 256;
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
-}  
+}
+
+void mandelbrotRenderCallback(std::shared_ptr<Canvas2D> canvas) {
+    if (!canvas.get()->getShaderProgram()->getProgram().has_value()) return;
+    unsigned int prog = canvas.get()->getShaderProgram()->getProgram().value();
+
+    glUniform2f(glGetUniformLocation(prog, "u_center"), centerX, centerY);
+    glUniform1f(glGetUniformLocation(prog, "u_zoom"), zoom);
+    glUniform1i(glGetUniformLocation(prog, "u_maxIter"), maxIter);
+}
 
 int main(int argc, char** argv) {
     if (!glfwInit()){
@@ -34,8 +51,8 @@ int main(int argc, char** argv) {
 
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
-    Canvas2D canvas = Canvas2D("../shaders/mandelbrot.frag");
-    if (!canvas.initSuccessful) {
+    std::shared_ptr<Canvas2D> canvas = std::make_shared<Canvas2D>("../shaders/mandelbrot.frag", mandelbrotRenderCallback);
+    if (!canvas->initSuccessful) {
         std::cout << "Error: could not initialize canvas2D" << std::endl;
         return -1;
     }
@@ -47,7 +64,7 @@ int main(int argc, char** argv) {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        canvas.loop();
+        canvas->loop();
 
         glfwPollEvents();    
     }

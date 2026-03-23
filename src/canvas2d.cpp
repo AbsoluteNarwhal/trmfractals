@@ -3,20 +3,21 @@
 #include <iostream>
 
 // Full-screen quad
-float Canvas2D::verts[] = {
+const float Canvas2D::verts[] = {
     1.0f,  1.0f, 0.0f,   // top right
     1.0f, -1.0f, 0.0f,   // bottom right
     -1.0f, -1.0f, 0.0f,  // bottom left
     -1.0f,  1.0f, 0.0f   // top left 
 };
 
-unsigned int Canvas2D::indices[] = {
+const unsigned int Canvas2D::indices[] = {
     0, 1, 3,  // first triangle
     1, 2, 3   // second triangle
 };
 
-Canvas2D::Canvas2D(const std::filesystem::path& fragPath) {
-    shaderProgram = std::make_unique<ShaderProgram>("../shaders/default.vert", fragPath);
+Canvas2D::Canvas2D(const std::filesystem::path& fragPath, std::function<void(std::shared_ptr<Canvas2D>)> renderCallback) 
+: renderCallback(renderCallback) {
+    shaderProgram = std::make_shared<ShaderProgram>("../shaders/default.vert", fragPath);
     if (!shaderProgram.get()->getProgram().has_value()) {
         std::cout << "Encountered errors while compiling shaders" << std::endl;
         return;
@@ -47,6 +48,15 @@ void Canvas2D::loop() {
     if (!shaderProgram.get()->getProgram().has_value()) return;
 
     glUseProgram(shaderProgram.get()->getProgram().value());
+
+    renderCallback(shared_from_this());
+
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+Canvas2D::~Canvas2D() {
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
 }

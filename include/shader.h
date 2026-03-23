@@ -7,6 +7,7 @@
 class ShaderProgram {
 public:
     ShaderProgram(const std::filesystem::path& vertPath, const std::filesystem::path& fragPath);
+    ~ShaderProgram();
     inline std::optional<unsigned int> getProgram() { return program; }
 
 private:
