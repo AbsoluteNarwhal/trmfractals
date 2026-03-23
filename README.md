@@ -1,6 +1,6 @@
 # Fractals!
 
-This is code for an essay submitted for the Tom Rocks Maths / Oxford University [essay competition](https://tomrocksmaths.com/trm-essay-competition/). Written in C++, it uses OpenGL to render fractals such as the Mandelbrot Set.
+This is code for an essay submitted for the Tom Rocks Maths / Oxford University [essay competition](https://tomrocksmaths.com/trm-essay-competition/). Written in C++, it uses OpenGL to render fractals such as the Mandelbrot Set using only a fragment shader.
 
 ## Build Instructions
 
@@ -18,4 +18,4 @@ This is code for an essay submitted for the Tom Rocks Maths / Oxford University 
 
 4. Build project with CMake: `cd build`, `cmake ..`, `cmake --build .`
 
-5. Run project: `./bin/fractals`
+5. Run project: `./out/fractals`
