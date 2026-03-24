@@ -1,16 +1,39 @@
 #include "canvas2d.h"
 #include "mandelbrot.h"
+#include "complexscreen.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <cmath>
 #include <memory>
 
+enum class FractalType {
+    MandelbrotSet
+};
+
 void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
 int main(int argc, char** argv) {
+    FractalType fractalType;
+
+    // Get fractal type
+    if (argc == 1) {
+        fractalType = FractalType::MandelbrotSet;
+    }
+    else if (argc > 2) {
+        std::cout << "Error: too many arguments" << std::endl;
+        return -1;
+    }
+    else if (strcmp(argv[1], "mandelbrot") == 0) {
+        fractalType = FractalType::MandelbrotSet;
+    }
+    else {
+        std::cout << "Error: unknown fractal type: '" << argv[1] << "'" << std::endl;
+        return -1;
+    }
+
     if (!glfwInit()){
         std::cout << "Error: could not initialise GLFW" << std::endl;
         return -1;
@@ -36,11 +59,17 @@ int main(int argc, char** argv) {
     }
 
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
-    glfwSetMouseButtonCallback(window, mandelbrotMouseButtonCallback);
-    glfwSetCursorPosCallback(window, mandelbrotCursorPosCallback);
-    glfwSetScrollCallback(window, mandelbrotScrollCallback);
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
+    glfwSetCursorPosCallback(window, cursorPosCallback);
+    glfwSetScrollCallback(window, scrollCallback);
 
-    std::shared_ptr<Canvas2D> canvas = std::make_shared<Canvas2D>("../shaders/mandelbrot.frag", mandelbrotRenderCallback);
+    std::shared_ptr<Canvas2D> canvas;
+
+    switch (fractalType) {
+        case FractalType::MandelbrotSet:
+            canvas = std::make_shared<Canvas2D>("../shaders/mandelbrot.frag", mandelbrotRenderCallback);
+    }
+
     if (!canvas->initSuccessful) {
         std::cout << "Error: could not initialize canvas2D" << std::endl;
         return -1;

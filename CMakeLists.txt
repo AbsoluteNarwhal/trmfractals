@@ -13,6 +13,7 @@ set(src_files
     src/main.cpp
     src/shader.cpp 
     src/canvas2d.cpp
+    src/complexscreen.cpp
     src/mandelbrot.cpp
 )
 
