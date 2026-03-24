@@ -29,9 +29,9 @@ void main() {
     // I came up with these colours using an advanced technique called picking random numbers and seeing if they look good
     float t = float(iter) / float(u_maxIter);
     fragColor = vec4(
-        0.5 + 0.5 * cos(6.28318 * (t * 3.0 + 0.0)),
-        0.5 + 0.5 * cos(6.28318 * (t * 3.0 + 0.33)),
-        0.5 + 0.5 * cos(6.28318 * (t * 3.0 + 0.67)),
+        0.5 + 0.5 * cos(6.3 * (t * 3.0 + 0.0)),
+        0.5 + 0.5 * cos(6.3 * (t * 3.0 + 0.33)),
+        0.5 + 0.5 * cos(6.3 * (t * 3.0 + 0.67)),
         1.0
     );
 }
