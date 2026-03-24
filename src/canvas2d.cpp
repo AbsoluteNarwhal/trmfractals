@@ -4,15 +4,15 @@
 
 // Full-screen quad
 const float Canvas2D::verts[] = {
-    1.0f,  1.0f, 0.0f,   // top right
-    1.0f, -1.0f, 0.0f,   // bottom right
-    -1.0f, -1.0f, 0.0f,  // bottom left
-    -1.0f,  1.0f, 0.0f   // top left 
+    1.0f, 1.0f, 0.0f,   // top right
+    1.0f, -1.0f, 0.0f,  // bottom right
+    -1.0f, -1.0f, 0.0f, // bottom left
+    -1.0f, 1.0f, 0.0f   // top left 
 };
 
 const unsigned int Canvas2D::indices[] = {
-    0, 1, 3,  // first triangle
-    1, 2, 3   // second triangle
+    0, 1, 3, // first triangle
+    1, 2, 3  // second triangle
 };
 
 Canvas2D::Canvas2D(const std::filesystem::path& fragPath, std::function<void(std::shared_ptr<Canvas2D>)> renderCallback) 

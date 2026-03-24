@@ -12,7 +12,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/out)
 set(src_files
     src/main.cpp
     src/shader.cpp 
-    src/canvas2d.cpp 
+    src/canvas2d.cpp
+    src/mandelbrot.cpp
 )
 
 add_executable(fractals ${src_files})

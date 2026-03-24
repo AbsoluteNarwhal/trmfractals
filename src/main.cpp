@@ -1,15 +1,10 @@
 #include "canvas2d.h"
+#include "mandelbrot.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <cmath>
 #include <memory>
-
-// Mandelbrot parameters (uniforms)
-float centerX = -0.5;
-float centerY = 0.0;
-float zoom = 0.35;
-int maxIter = 256;
 
 // Dragging (touchpad)
 bool dragging = false;
@@ -17,21 +12,6 @@ double dragStartX = 0;
 double dragStartY = 0;
 float dragStartCx = centerX;
 float dragStartCy = centerY;
-
-void screenToComplex(GLFWwindow* w, double px, double py, float& re, float& im) {
-    int W, H;
-    glfwGetFramebufferSize(w, &W, &H);
-    float ndcX = -((float)(px / W) * 2.0f - 1.0f);
-    float ndcY = (float)(py / H) * 2.0f - 1.0f;
-    re = ndcX / zoom + centerX;
-    im = ndcY / zoom + centerY;
-}
-
-void zoomToward(float re, float im, float factor) {
-    centerX = re + (centerX - re) * factor;
-    centerY = im + (centerY - im) * factor;
-    zoom *= factor;
-}
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -60,7 +40,7 @@ void mouseButtonCallback(GLFWwindow* w, int button, int action, int /*mods*/) {
         }
         lastClickTime = now;
 
-        dragging    = true;
+        dragging = true;
         dragStartCx = centerX;
         dragStartCy = centerY;
         glfwGetCursorPos(w, &dragStartX, &dragStartY);
@@ -75,8 +55,8 @@ void cursorPosCallback(GLFWwindow* w, double xpos, double ypos) {
     int W, H;
     glfwGetFramebufferSize(w, &W, &H);
     float scale = 2.0f / ((float)W * zoom);
-    centerX = dragStartCx - (float)(xpos - dragStartX) * scale;  // - not +
-    centerY = dragStartCy + (float)(ypos - dragStartY) * scale;  // + not -
+    centerX = dragStartCx - (float)(xpos - dragStartX) * scale;
+    centerY = dragStartCy + (float)(ypos - dragStartY) * scale;
 }
 
 void scrollCallback(GLFWwindow* w, double deltaX, double deltaY) {
@@ -84,7 +64,7 @@ void scrollCallback(GLFWwindow* w, double deltaX, double deltaY) {
     glfwGetCursorPos(w, &mx, &my);
 
     bool pinching = glfwGetKey(w, GLFW_KEY_LEFT_CONTROL)  == GLFW_PRESS ||
-                    glfwGetKey(w, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS;
+        glfwGetKey(w, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS;
 
     if (pinching) {
         // Trackpad pinch zoom
@@ -106,15 +86,6 @@ void scrollCallback(GLFWwindow* w, double deltaX, double deltaY) {
         float factor = std::pow(1.15f, (float)deltaY);
         zoomToward(re, im, factor);
     }
-}
-
-void mandelbrotRenderCallback(std::shared_ptr<Canvas2D> canvas) {
-    if (!canvas.get()->getShaderProgram()->getProgram().has_value()) return;
-    unsigned int prog = canvas.get()->getShaderProgram()->getProgram().value();
-
-    glUniform2f(glGetUniformLocation(prog, "u_center"), centerX, centerY);
-    glUniform1f(glGetUniformLocation(prog, "u_zoom"), zoom);
-    glUniform1i(glGetUniformLocation(prog, "u_maxIter"), maxIter);
 }
 
 int main(int argc, char** argv) {
