@@ -5,6 +5,7 @@ out vec4 fragColor;
 uniform vec2 u_center;
 uniform float u_zoom;
 uniform int u_maxIter;
+uniform int u_doColour;
 
 void main() {
     // Map fragment to complex plane
@@ -25,13 +26,18 @@ void main() {
         return;
     }
 
-    // Diverges faster = different colour
-    // I came up with these colours using an advanced technique called picking random numbers and seeing if they look good
-    float t = float(iter) / float(u_maxIter);
-    fragColor = vec4(
-        0.5 + 0.5 * cos(6.3 * (t * 3.0 + 0.0)),
-        0.5 + 0.5 * cos(6.3 * (t * 3.0 + 0.33)),
-        0.5 + 0.5 * cos(6.3 * (t * 3.0 + 0.67)),
-        1.0
-    );
+    if (u_doColour == 0) {
+        fragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    }
+    else {
+        // Diverges faster = different colour
+        // I came up with these colours using an advanced technique called picking random numbers and seeing if they look good
+        float t = float(iter) / float(u_maxIter);
+        fragColor = vec4(
+            0.5 + 0.5 * cos(6.3 * (t * 3.0 + 0.0)),
+            0.5 + 0.5 * cos(6.3 * (t * 3.0 + 0.33)),
+            0.5 + 0.5 * cos(6.3 * (t * 3.0 + 0.67)),
+            1.0
+        );
+    }
 }

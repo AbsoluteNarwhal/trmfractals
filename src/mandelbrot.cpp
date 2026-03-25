@@ -5,6 +5,7 @@
 #include <memory>
 
 int maxIter = 256;
+int doColour = 1;
 
 void mandelbrotRenderCallback(std::shared_ptr<Canvas2D> canvas) {
     if (!canvas.get()->getShaderProgram()->getProgram().has_value()) return;
@@ -13,4 +14,5 @@ void mandelbrotRenderCallback(std::shared_ptr<Canvas2D> canvas) {
     glUniform2f(glGetUniformLocation(prog, "u_center"), centerX, centerY);
     glUniform1f(glGetUniformLocation(prog, "u_zoom"), zoom);
     glUniform1i(glGetUniformLocation(prog, "u_maxIter"), maxIter);
+    glUniform1i(glGetUniformLocation(prog, "u_doColour"), doColour);
 }
