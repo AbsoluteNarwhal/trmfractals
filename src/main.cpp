@@ -99,7 +99,7 @@ int main(int argc, char** argv) {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        mandelbrotGUI(io);
+        mandelbrotGUI();
 
         ImGui::Render();
         

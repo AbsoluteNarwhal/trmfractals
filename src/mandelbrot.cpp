@@ -7,6 +7,7 @@
 
 int maxIter = 256;
 int doColour = 1;
+float colourFrequency = 3.0f;
 
 void mandelbrotRenderCallback(std::shared_ptr<Canvas2D> canvas) {
     if (!canvas.get()->getShaderProgram()->getProgram().has_value()) return;
@@ -16,11 +17,14 @@ void mandelbrotRenderCallback(std::shared_ptr<Canvas2D> canvas) {
     glUniform1f(glGetUniformLocation(prog, "u_zoom"), zoom);
     glUniform1i(glGetUniformLocation(prog, "u_maxIter"), maxIter);
     glUniform1i(glGetUniformLocation(prog, "u_doColour"), doColour);
+    glUniform1f(glGetUniformLocation(prog, "u_colourFrequency"), colourFrequency);
 }
 
-void mandelbrotGUI(ImGuiIO& io) {
+void mandelbrotGUI() {
     ImGui::Begin("Mandelbrot Set Settings");
-    ImGui::Text("Average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+    ImGui::Text("Average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::SliderInt("Max. iterations", &maxIter, 1, 2048);
     ImGui::Checkbox("Draw divergent colours", (bool*) &doColour);
+    ImGui::SliderFloat("Colour frequency", &colourFrequency, 1.0, 10.0);
     ImGui::End();
 }

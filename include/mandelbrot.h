@@ -10,4 +10,4 @@
 void mandelbrotRenderCallback(std::shared_ptr<Canvas2D> canvas);
 
 // ImGUI window
-void mandelbrotGUI(ImGuiIO& io);
+void mandelbrotGUI();

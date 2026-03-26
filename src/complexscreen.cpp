@@ -1,4 +1,5 @@
 #include "complexscreen.h"
+#include "imgui.h"
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <cmath>
@@ -32,6 +33,8 @@ void zoomToward(float re, float im, float factor) {
 
 void mouseButtonCallback(GLFWwindow* w, int button, int action, int /*mods*/) {
     if (button != GLFW_MOUSE_BUTTON_LEFT) return;
+
+    if (ImGui::GetIO().WantCaptureMouse) return;
 
     if (action == GLFW_PRESS) {
         dragging = true;
