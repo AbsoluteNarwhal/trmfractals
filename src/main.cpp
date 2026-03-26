@@ -10,9 +10,18 @@
 #include <cmath>
 #include <memory>
 
+bool showGUIs = true;
+
 enum class FractalType {
     MandelbrotSet
 };
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (key == GLFW_KEY_H && action == GLFW_PRESS) {
+        if (showGUIs) showGUIs = false;
+        else showGUIs = true;
+    }
+}
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -61,6 +70,7 @@ int main(int argc, char** argv) {
         return -1;
     }
 
+    glfwSetKeyCallback(window, keyCallback);
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
     glfwSetMouseButtonCallback(window, mouseButtonCallback);
     glfwSetCursorPosCallback(window, cursorPosCallback);
@@ -99,7 +109,8 @@ int main(int argc, char** argv) {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        mandelbrotGUI();
+        if (showGUIs && fractalType == FractalType::MandelbrotSet)
+            mandelbrotGUI();
 
         ImGui::Render();
         
