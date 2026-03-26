@@ -22,6 +22,7 @@ void mandelbrotRenderCallback(std::shared_ptr<Canvas2D> canvas) {
 
 void mandelbrotGUI() {
     ImGui::Begin("Mandelbrot Set Settings");
+    ImGui::Text("Fractals version %s", TRMFRACTALS_VERSION);
     ImGui::Text("Average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::SliderInt("Max. iterations", &maxIter, 1, 2048);
     ImGui::Checkbox("Draw divergent colours", (bool*) &doColour);

@@ -17,7 +17,7 @@ const unsigned int Canvas2D::indices[] = {
 
 Canvas2D::Canvas2D(const std::filesystem::path& fragPath, std::function<void(std::shared_ptr<Canvas2D>)> renderCallback) 
 : renderCallback(renderCallback) {
-    shaderProgram = std::make_shared<ShaderProgram>("../shaders/default.vert", fragPath);
+    shaderProgram = std::make_shared<ShaderProgram>("resources/shaders/default.vert", fragPath);
     if (!shaderProgram.get()->getProgram().has_value()) {
         std::cout << "Encountered errors while compiling shaders" << std::endl;
         return;

@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.28...4.3)
-project(trmfractals VERSION 1.0.0)
+
+project(trmfractals VERSION 0.1.0)
 
 add_subdirectory(extern/glfw)
 add_subdirectory(extern/glad)
@@ -34,5 +35,14 @@ target_include_directories(fractals PUBLIC extern/imgui)
 target_include_directories(fractals PUBLIC extern/imgui/backends)
 target_include_directories(fractals PUBLIC extern/imgui/misc/cpp)
 
+target_compile_definitions(fractals PUBLIC TRMFRACTALS_VERSION="0.1.0-alpha")
+
 target_link_libraries(fractals PUBLIC glfw)
 target_link_libraries(fractals PUBLIC glad)
+
+add_custom_command(
+    TARGET fractals POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_SOURCE_DIR}/shaders"
+        "${CMAKE_BINARY_DIR}/out/resources/shaders"
+)

@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
 
     switch (fractalType) {
         case FractalType::MandelbrotSet:
-            canvas = std::make_shared<Canvas2D>("../shaders/mandelbrot.frag", mandelbrotRenderCallback);
+            canvas = std::make_shared<Canvas2D>("resources/shaders/mandelbrot.frag", mandelbrotRenderCallback);
     }
 
     if (!canvas->initSuccessful) {
