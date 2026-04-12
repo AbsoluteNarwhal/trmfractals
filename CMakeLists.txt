@@ -40,6 +40,14 @@ target_compile_definitions(fractals PUBLIC TRMFRACTALS_VERSION="0.1.0-alpha")
 target_link_libraries(fractals PUBLIC glfw)
 target_link_libraries(fractals PUBLIC glad)
 
+if (WIN32)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+        set_target_properties(fractals PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+    else()
+        target_link_options(fractals PRIVATE -mwindows)
+    endif()
+endif()
+
 add_custom_command(
     TARGET fractals POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
